@@ -1,0 +1,19 @@
+[[build_services]]
+= Shared Build Services
+
+Sometimes, is it useful for several tasks to share some state or resource. For example, tasks might share a cache of pre-computed values in order to do their work faster.
+Gradle allows you to declare _build services_ to represent this state. Gradle takes care of the service lifecycle, creating the service only when it is required and cleaning it up
+once it is no longer required.
+
+Gradle can optionally also take care of coordinating access to the build service, so that no more than a certain number of tasks can use the service concurrently.
+
+To implement a build service, you create an abstract class and extend `BuildService` and add whichever methods to this type that you'd like tasks to use.
+Optionally, a build service can take parameters, which Gradle injects into the service instance when creating it.
+
+example
+
+Note that you should not implement the `BuildService.getParameters()` method, as Gradle will provide an implementation of this.
+
+A build service implementation can also
+
+See ?? for more details about writing a custom Gradle type.
