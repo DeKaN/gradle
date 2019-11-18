@@ -10,7 +10,7 @@ public class DownloadPlugin implements Plugin<Project> {
         });
 
         // Connect the provider to the task
-        project.getTasks().register("download", Download.java, task -> {
+        project.getTasks().register("download", Download.class, task -> {
             task.getServer().set(serviceProvider);
         });
     }

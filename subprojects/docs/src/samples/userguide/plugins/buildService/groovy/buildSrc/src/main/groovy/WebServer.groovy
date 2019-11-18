@@ -1,9 +1,11 @@
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
+import org.gradle.api.provider.Property
+import org.gradle.api.file.DirectoryProperty
 
 abstract class WebServer implements BuildService<Params>, AutoCloseable {
     interface Params extends BuildServiceParameters {
-        Property<Int> getPort()
+        Property<Integer> getPort()
 
         DirectoryProperty getResources()
     }
@@ -14,7 +16,7 @@ abstract class WebServer implements BuildService<Params>, AutoCloseable {
 
         // start the server ...
 
-        System.out.println("Server is running at $url")
+        System.out.println("Server is running at $uri")
     }
 
     void close() {
