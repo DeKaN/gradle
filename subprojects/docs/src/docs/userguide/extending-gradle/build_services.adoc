@@ -2,18 +2,39 @@
 = Shared Build Services
 
 Sometimes, is it useful for several tasks to share some state or resource. For example, tasks might share a cache of pre-computed values in order to do their work faster.
-Gradle allows you to declare _build services_ to represent this state. Gradle takes care of the service lifecycle, creating the service only when it is required and cleaning it up
-once it is no longer required.
+Gradle allows you to declare _build services_ to represent this state. Gradle takes care of the lifecycle of the service, creating the service only when it is required and cleaning it up
+once it is no longer required. Gradle can optionally also take care of coordinating access to the build service, so that no more than a certain number of tasks can use the service concurrently.
 
-Gradle can optionally also take care of coordinating access to the build service, so that no more than a certain number of tasks can use the service concurrently.
+To implement a build service, you create an abstract class that extends `BuildService` and add whichever methods to this type that you'd like tasks to use.
 
-To implement a build service, you create an abstract class and extend `BuildService` and add whichever methods to this type that you'd like tasks to use.
-Optionally, a build service can take parameters, which Gradle injects into the service instance when creating it.
+Optionally, a build service can take parameters, which Gradle injects into the service instance when creating it. To provide parameters, you define an abstract class or an interface that
+holds the parameters. The parameters type must extend `BuildServiceParameters`. The service implementation can access the parameters using `this.getParameters()`.
 
-example
+A build service implementation can also optionally implement `AutoCloseable`, in which case Gradle will call the build service instance's `close()` method when it discards the service instance.
+
+Here is an example of a service that takes parameters and is closeable:
+
+.Build service implementation
+====
+[source.multi-language-sample,java]
+.WebServer.java
+----
+include::{samplesPath}/userguide/plugins/buildService/java/buildSrc/src/main/java/WebServer.java[]
+----
+[source.multi-language-sample,kotlin]
+.WebServer.kt
+----
+include::{samplesPath}/userguide/plugins/buildService/kotlin/buildSrc/src/main/kotlin/WebServer.kt[]
+----
+[source.multi-language-sample,groovy]
+.WebServer.groovy
+----
+include::{samplesPath}/userguide/plugins/buildService/groovy/buildSrc/src/main/groovy/WebServer.groovy[]
+----
+====
 
 Note that you should not implement the `BuildService.getParameters()` method, as Gradle will provide an implementation of this.
 
-A build service implementation can also
+Both the build service implementation and the parameters type are treated as 'custom Gradle types'. See ?? for more details about writing a custom Gradle type.
 
-See ?? for more details about writing a custom Gradle type.
+To use a build service, use the `registerIfAbsent()` method.
