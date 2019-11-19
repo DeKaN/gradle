@@ -5,16 +5,16 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
-abstract class Download extends DefaultTask {
-    @Internal
-    abstract Property<WebServer> getServer()
+abstract class Download : DefaultTask() {
+    @get:Internal
+    abstract val server: Property<WebServer>
 
-    @OutputFile
-    abstract RegularFileProperty getOutputFile()
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
 
     @TaskAction
-    void download() {
-        def server = server.get()
+    fun download() {
+        val server = server.get()
         // use the server to download a file
     }
 }

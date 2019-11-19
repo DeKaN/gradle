@@ -19,6 +19,7 @@ abstract class WebServer implements BuildService<Params>, AutoCloseable {
         System.out.println("Server is running at $uri")
     }
 
+    @Override
     void close() {
         // stop the server ...
     }

@@ -1,5 +1,8 @@
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
+import org.gradle.api.provider.Property
+import org.gradle.api.file.DirectoryProperty
+import java.net.URI
 
 abstract class WebServer : BuildService<WebServer.Params>, AutoCloseable {
     interface Params : BuildServiceParameters {
@@ -16,7 +19,7 @@ abstract class WebServer : BuildService<WebServer.Params>, AutoCloseable {
         println("Server is running at $uri")
     }
 
-    fun close() {
+    override fun close() {
         // stop the server
     }
 }

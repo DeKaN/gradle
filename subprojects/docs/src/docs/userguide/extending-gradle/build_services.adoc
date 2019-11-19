@@ -5,6 +5,8 @@ Sometimes, is it useful for several tasks to share some state or resource. For e
 Gradle allows you to declare _build services_ to represent this state. Gradle takes care of the lifecycle of the service, creating the service only when it is required and cleaning it up
 once it is no longer required. Gradle can optionally also take care of coordinating access to the build service, so that no more than a certain number of tasks can use the service concurrently.
 
+== Implementing a build service
+
 To implement a build service, you create an abstract class that extends `BuildService` and add whichever methods to this type that you'd like tasks to use.
 
 Optionally, a build service can take parameters, which Gradle injects into the service instance when creating it. To provide parameters, you define an abstract class or an interface that
@@ -37,4 +39,38 @@ Note that you should not implement the `BuildService.getParameters()` method, as
 
 Both the build service implementation and the parameters type are treated as 'custom Gradle types'. See ?? for more details about writing a custom Gradle type.
 
-To use a build service, use the `registerIfAbsent()` method.
+== Using a build service
+
+To use a build service, you need to register the service instance, using the `BuildServiceRegisty.registerIfAbsent()` method. Registering the service does not create the
+service instance. This happens when the service is used by a task.
+
+Currently, build services are scoped to a build, rather than to a project, as these services are intended to be shared by the tasks of all projects.
+
+Here is an example of a plugin that registers the previous service:
+
+.Build service registration
+====
+[source.multi-language-sample,java]
+.DownloadPlugin.java
+----
+include::{samplesPath}/userguide/plugins/buildService/java/buildSrc/src/main/java/DownloadPlugin.java[]
+----
+[source.multi-language-sample,kotlin]
+.DownloadPlugin.kt
+----
+include::{samplesPath}/userguide/plugins/buildService/kotlin/buildSrc/src/main/kotlin/DownloadPlugin.kt[]
+----
+[source.multi-language-sample,groovy]
+.DownloadPlugin.groovy
+----
+include::{samplesPath}/userguide/plugins/buildService/groovy/buildSrc/src/main/groovy/DownloadPlugin.groovy[]
+----
+====
+
+The plugin registers the service and receives a `Provider<WebService>` back. This provider can be connected to task properties to pass the service to the task.
+
+Generally, build services are intended to be used by tasks. However, it can make sense to use the service at configuration time. This is possible, simply call `get()` on the provider.
+
+== Concurrent access to the service
+
+You can constrain parallel execution.

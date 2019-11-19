@@ -12,6 +12,7 @@ public class DownloadPlugin implements Plugin<Project> {
         // Connect the provider to the task
         project.getTasks().register("download", Download.class, task -> {
             task.getServer().set(serviceProvider);
+            task.getOutputFile().set(project.getLayout().getBuildDirectory().file("result.zip"));
         });
     }
 }
