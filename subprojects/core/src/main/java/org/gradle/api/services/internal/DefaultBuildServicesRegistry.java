@@ -51,6 +51,10 @@ public class DefaultBuildServicesRegistry implements BuildServiceRegistryInterna
     private final Instantiator paramsInstantiator;
     private final Instantiator specInstantiator;
 
+    public void deleteMe() {
+        System.out.println("ignore!");
+    }
+
     public DefaultBuildServicesRegistry(DomainObjectCollectionFactory factory, InstantiatorFactory instantiatorFactory, ServiceRegistry services, ListenerManager listenerManager, IsolatableFactory isolatableFactory, SharedResourceLeaseRegistry leaseRegistry) {
         this.registrations = Cast.uncheckedCast(factory.newNamedDomainObjectSet(BuildServiceRegistration.class));
         this.instantiatorFactory = instantiatorFactory;
