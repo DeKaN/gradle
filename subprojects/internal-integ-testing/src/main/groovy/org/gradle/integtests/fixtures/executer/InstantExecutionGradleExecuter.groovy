@@ -30,6 +30,7 @@ class InstantExecutionGradleExecuter extends DaemonGradleExecuter {
         IntegrationTestBuildContext buildContext
     ) {
         super(distribution, testDirectoryProvider, gradleVersion, buildContext)
+        requireIsolatedDaemons()
     }
 
     @Override
